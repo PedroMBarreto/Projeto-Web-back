@@ -1,10 +1,10 @@
-package br.ifba.com.testebd;
+package br.ifba.com.api;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class TesteBdApplicationTests {
+class ApiApplicationTests {
 
     @Test
     void contextLoads() {
