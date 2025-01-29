@@ -7,8 +7,8 @@ public class Main {
 
         UsuarioController usuarioController = new UsuarioController();
 
-        /*// Adicionando um usuário
-        usuarioController.adicionarUsuario("Maria", "senha123");*/
+        // Adicionando um usuário
+        //usuarioController.adicionarUsuario("Predo", "123456");
 
         // Listando usuários
         List<Usuario> usuario = usuarioController.listarUsuarios();
@@ -25,9 +25,7 @@ public class Main {
         }
 
         // Atualizar usuário
-        usuarioController.atualizarUsuario(1, "Maria Silva", "novaSenha123");
+        //usuarioController.atualizarUsuario(3, "Maria Silva", "novaSenha123");
 
-        // Excluir usuário
-        usuarioController.excluirUsuario(1);
     }
 }
