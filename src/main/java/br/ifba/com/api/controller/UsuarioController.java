@@ -1,12 +1,13 @@
 package br.ifba.com.api.controller;
 
-import br.ifba.com.api.DAO.IUsuario;
+import br.ifba.com.api.repository.IUsuario;
 import br.ifba.com.api.model.Usuario;
+import br.ifba.com.api.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @CrossOrigin("*")
@@ -16,27 +17,31 @@ public class UsuarioController {
     @Autowired
     private IUsuario dao;
 
+    private UsuarioService usuarioService;
+
+    public UsuarioController(UsuarioService usuarioService) {
+        this.usuarioService = usuarioService;
+    }
+
     @GetMapping
-    public List<Usuario> listaUsuarios() {
-        return (List<Usuario>) dao.findAll();
+    public ResponseEntity<List<Usuario>> listaUsuarios() {
+        return ResponseEntity.status(200).body(usuarioService.listarUsuario());
     }
 
     @PostMapping
-    public Usuario criarUsuario(@RequestBody Usuario usuario) {
-        Usuario usuarioNovo = dao.save(usuario);
-        return usuarioNovo;
+    public ResponseEntity<Usuario> criarUsuario(@RequestBody Usuario usuario) {
+        return ResponseEntity.status(201).body(usuarioService.criarUsuario(usuario));
     }
 
     @PutMapping
-    public Usuario atualizarUsuario(@RequestBody Usuario usuario) {
+    public ResponseEntity<Usuario> atualizarUsuario(@RequestBody Usuario usuario) {
         Usuario usuarioNovo = dao.save(usuario);
-        return dao.save(usuario);
+        return ResponseEntity.status(201).body(usuarioNovo);
     }
 
     @DeleteMapping("/{id}")
-    public Optional<Usuario> deletarUsuario (@PathVariable Integer id) {
-        Optional<Usuario> usuario = dao.findById(id);
+    public ResponseEntity<?> deletarUsuario (@PathVariable Integer id) {
         dao.deleteById(id);
-        return usuario;
+        return ResponseEntity.status(204).build();
     }
 }
