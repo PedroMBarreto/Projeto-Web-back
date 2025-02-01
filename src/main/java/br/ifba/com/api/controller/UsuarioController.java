@@ -1,21 +1,23 @@
 package br.ifba.com.api.controller;
 
-import br.ifba.com.api.repository.IUsuario;
-import br.ifba.com.api.model.Usuario;
+import br.ifba.com.api.dto.UsuarioGetResponseDto;
+import br.ifba.com.api.dto.UsuarioPostRequestDto;
+import br.ifba.com.api.dto.UsuarioUpdateRequestDto;
+import br.ifba.com.api.entity.Usuario;
+import br.ifba.com.api.infrastructure.mapper.ObjectMapperUtil;
 import br.ifba.com.api.service.UsuarioService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
-import java.util.List;
+import java.util.Map;
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping("/usuarios")
+@RequestMapping(path = "/usuarios")
 public class UsuarioController {
-
-    @Autowired
-    private IUsuario dao;
 
     private UsuarioService usuarioService;
 
@@ -23,25 +25,37 @@ public class UsuarioController {
         this.usuarioService = usuarioService;
     }
 
-    @GetMapping
-    public ResponseEntity<List<Usuario>> listaUsuarios() {
-        return ResponseEntity.status(200).body(usuarioService.listarUsuario());
+    @GetMapping(path = "/findall", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> findAll() {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ObjectMapperUtil.mapList(this.usuarioService.findAll(), UsuarioGetResponseDto.class));
     }
 
-    @PostMapping
-    public ResponseEntity<Usuario> criarUsuario(@RequestBody Usuario usuario) {
-        return ResponseEntity.status(201).body(usuarioService.criarUsuario(usuario));
+
+    @PostMapping(path = "/save", consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> save(@RequestBody @Valid UsuarioPostRequestDto usuarioPostRequestDto) {
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ObjectMapperUtil.map(usuarioService.save(
+                                (ObjectMapperUtil.map(usuarioPostRequestDto, Usuario.class))),
+                        UsuarioGetResponseDto.class
+                ));
     }
 
-    @PutMapping
-    public ResponseEntity<Usuario> atualizarUsuario(@RequestBody Usuario usuario) {
-        Usuario usuarioNovo = dao.save(usuario);
-        return ResponseEntity.status(201).body(usuarioNovo);
+    @PutMapping(path = "/update/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> update(@PathVariable("id") Integer id, @RequestBody UsuarioUpdateRequestDto usuarioUpdateRequestDto) {
+        Usuario usuarioAtualizado = usuarioService.update(id,
+                ObjectMapperUtil.map(usuarioUpdateRequestDto, Usuario.class));
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ObjectMapperUtil.map(usuarioAtualizado, UsuarioGetResponseDto.class));
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deletarUsuario (@PathVariable Integer id) {
-        dao.deleteById(id);
-        return ResponseEntity.status(204).build();
+    @DeleteMapping(path = "/delete/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> delete(@PathVariable("id") Integer id) {
+        usuarioService.delete(id);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(Map.of("LOG", "Usuario excluido com sucesso"));
     }
 }
