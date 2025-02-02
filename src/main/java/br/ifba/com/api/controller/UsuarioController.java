@@ -19,7 +19,7 @@ import java.util.Map;
 @RequestMapping(path = "/usuarios")
 public class UsuarioController {
 
-    private UsuarioService usuarioService;
+    private final UsuarioService usuarioService;
 
     public UsuarioController(UsuarioService usuarioService) {
         this.usuarioService = usuarioService;
@@ -43,7 +43,7 @@ public class UsuarioController {
                 ));
     }
 
-    @PutMapping(path = "/update/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> update(@PathVariable("id") Integer id, @RequestBody UsuarioUpdateRequestDto usuarioUpdateRequestDto) {
         Usuario usuarioAtualizado = usuarioService.update(id,
                 ObjectMapperUtil.map(usuarioUpdateRequestDto, Usuario.class));
@@ -52,7 +52,7 @@ public class UsuarioController {
                 .body(ObjectMapperUtil.map(usuarioAtualizado, UsuarioGetResponseDto.class));
     }
 
-    @DeleteMapping(path = "/delete/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> delete(@PathVariable("id") Integer id) {
         usuarioService.delete(id);
         return ResponseEntity.status(HttpStatus.OK)
