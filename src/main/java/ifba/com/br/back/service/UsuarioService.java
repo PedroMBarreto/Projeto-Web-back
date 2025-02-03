@@ -1,13 +1,17 @@
 package ifba.com.br.back.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import ifba.com.br.back.DAO.IUsuario;
+import ifba.com.br.back.dto.UsuarioGetResponseDto;
 import ifba.com.br.back.entity.Usuario;
 import ifba.com.br.back.exception.BusinessException;
+import ifba.com.br.back.mapper.UsuarioMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -15,6 +19,19 @@ public class UsuarioService {
 
     @Autowired
     private IUsuario iusuario;
+
+    private final IUsuario usuarioRepository;
+    private final ObjectMapper objectMapper;
+
+    public UsuarioService(IUsuario usuarioRepository, ObjectMapper objectMapper) {
+        this.usuarioRepository = usuarioRepository;
+        this.objectMapper = objectMapper;
+    }
+
+    public Page<UsuarioGetResponseDto> findall(Pageable pageable) {
+        return UsuarioMapper.toDtoPage(usuarioRepository.findAll(pageable));
+    }
+
 
     @Transactional
     public Usuario save(Usuario usuario) {
@@ -61,7 +78,4 @@ public class UsuarioService {
         return iusuario.findById(id).orElse(null);
     }
 
-    public List<Usuario> findall() {
-        return iusuario.findAll();
-    }
 }

@@ -8,6 +8,8 @@ import ifba.com.br.back.exception.BusinessException;
 import ifba.com.br.back.mapper.UsuarioMapper;
 import ifba.com.br.back.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin("*")
 @RequestMapping("/usuario_cadastro")
 @RestController
 @Validated
@@ -26,12 +29,9 @@ public class UsuarioController {
 
     // GET - Buscar todos os usuários
     @GetMapping(path = "/findall", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> findall() {
-        List<Usuario> usuarios = usuarioService.findall();
-        if (usuarios.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Nenhum usuário encontrado.");
-        }
-        return ResponseEntity.status(HttpStatus.OK).body(UsuarioMapper.mapAll(usuarios));
+    public ResponseEntity<Page<UsuarioGetResponseDto>> findAll(Pageable pageable) {
+        Page<UsuarioGetResponseDto> usuarios = usuarioService.findall(pageable);
+        return ResponseEntity.status(HttpStatus.OK).body(usuarios);
     }
 
     // POST - Criar um novo usuário

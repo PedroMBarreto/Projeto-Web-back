@@ -4,6 +4,7 @@ import ifba.com.br.back.dto.UsuarioGetResponseDto;
 import ifba.com.br.back.dto.UsuarioPostRequestDto;
 import ifba.com.br.back.dto.UsuarioPutRequestDto;
 import ifba.com.br.back.entity.Usuario;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,6 +28,11 @@ public class UsuarioMapper {
                 .collect(Collectors.toList());
     }
 
+    // 🔹 Novo método para converter Page<Usuario> → Page<UsuarioGetResponseDto>
+    public static Page<UsuarioGetResponseDto> toDtoPage(Page<Usuario> usuariosPage) {
+        return usuariosPage.map(UsuarioMapper::toDto);
+    }
+
     // Método para converter DTO (POST) → Entidade
     public static Usuario toEntity(UsuarioPostRequestDto dto) {
         Usuario usuario = new Usuario();
@@ -48,5 +54,3 @@ public class UsuarioMapper {
         return usuario;
     }
 }
-
-
