@@ -67,5 +67,11 @@ public class UsuarioController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
         }
     }
+
+    @GetMapping("/findbyid/{id}")
+    public ResponseEntity<Usuario> findById(@PathVariable Integer id) {
+        Usuario usuario = usuarioService.findById(id);
+        return ResponseEntity.ok(usuario);
+    }
 }
 

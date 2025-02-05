@@ -1,10 +1,10 @@
-package br.ifba.com.api;
+package ifba.com.br.webclient;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class ApiApplicationTests {
+class WebClientApplicationTests {
 
     @Test
     void contextLoads() {

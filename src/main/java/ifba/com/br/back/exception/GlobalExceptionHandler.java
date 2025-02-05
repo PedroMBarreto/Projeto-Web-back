@@ -45,6 +45,7 @@ public class GlobalExceptionHandler {
 // Captura exceções gerais, como NullPointerException, etc.
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleGenericException(Exception ex) {
-        return new ResponseEntity<>("Ocorreu um erro inesperado: " + ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>("Ocorreu um erro inesperado: "
+                + ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
