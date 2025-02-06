@@ -1,4 +1,4 @@
-package ifba.com.br.back.DAO;
+package ifba.com.br.back.repository;
 
 import ifba.com.br.back.entity.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;

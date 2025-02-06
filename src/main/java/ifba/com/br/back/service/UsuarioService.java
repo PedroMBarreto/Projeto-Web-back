@@ -1,7 +1,7 @@
 package ifba.com.br.back.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import ifba.com.br.back.DAO.IUsuario;
+import ifba.com.br.back.repository.IUsuario;
 import ifba.com.br.back.dto.UsuarioGetResponseDto;
 import ifba.com.br.back.entity.Usuario;
 import ifba.com.br.back.exception.BusinessException;
@@ -77,6 +77,11 @@ public class UsuarioService {
     public Usuario findById(Integer id) {
         Optional<Usuario> usuario = usuarioRepository.findById(id);
         return usuario.orElseThrow(() -> new RuntimeException("Usuario não encontrado!"));
+    }
+
+    public Usuario findByEmail(String email) {
+        Optional<Usuario> usuarioExistente = usuarioRepository.findByEmail(email);
+        return usuarioExistente.orElse(null);
     }
 
 }
